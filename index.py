@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect
-from flask_login import login_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 from data import db_session
 from data.users import User
@@ -9,6 +9,13 @@ import os
 app = Flask(__name__)
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
 
 
 @app.route('/')
@@ -56,5 +63,17 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
+def main():
+    db_session.global_init("db/blogs.db")
+    app.run(port=8080, host="127.0.0.1")
+
+
 if __name__ == '__main__':
-    app.run(port=8080, host='127.0.0.1')
+    main()
