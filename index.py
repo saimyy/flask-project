@@ -1,11 +1,12 @@
 from flask import Flask, render_template, redirect
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-
 from data import db_session
 from data.users import User
 from forms.user import RegisterForm, LoginForm
 import os
+from cf_api import create_json
 
+global us
 app = Flask(__name__)
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
@@ -16,10 +17,15 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
 @app.route('/')
 def home_page():
+    global us
+    db_sess = db_session.create_session()
+    if current_user.is_authenticated:
+        us = db_sess.query(User).where(User.name == current_user.name).first().name
     return render_template('index.html', title='Home Page')
 
 
@@ -68,6 +74,13 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/new_table', methods=['GET', 'POST'])
+@login_required
+def new_table():
+    create_json(us)
+
 
 
 def main():

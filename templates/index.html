@@ -1,15 +1,23 @@
 {%extends "base.html"%}
 {%block content%}
+{% if current_user.is_authenticated %}
+<h1>Новый проект</h1>
+<a href="new_table" class="btn btn-secondary">Добавить таблицу</a>
+{% endif %}
 <div class="container mt-5">
     <div class="row">
+        {% if not current_user.is_authenticated %}
         <div class="col-md-6">
             <h2>Добро пожаловать!</h2>
             <p>Здесь вы можете авторизоваться или зарегистрироваться.</p>
-            <a href="/login" class="btn btn-primary">Авторизация/Регистрация</a>
+            <a href="/login" class="btn btn-primary">Авторизация</a>
         </div>
+        {% endif %}
         <div class="col-md-6">
             <h2>О моем проекте</h2>
-            <p>Описание вашего проекта.</p>
+            <p>Этот замечательный и незабываемый проект станет вашим помощником во всех интенсивах, проводимых на сайте
+                codeforces!Необыкновенный дизайн в стиле модерн и минимализм, передовые технолоие!Все это в ИНТЕНСИВНОМ
+                РЕШАЛЕ</p>
         </div>
     </div>
 </div>
