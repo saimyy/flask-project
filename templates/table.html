@@ -1,0 +1,14 @@
+{%extends "base.html"%}
+{%block content%}
+<h1>JSON Checkbox Form</h1>
+    <form id="jsonForm" method="post" action="/submit">
+        <div id="checkboxContainer">
+            {% for item in jsonData %}
+                <input type="checkbox" name="checkboxItem" value="{{ item.id }}">
+                <label>{{ item }}</label>
+                <br>
+            {% endfor %}
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+{%endblock%}

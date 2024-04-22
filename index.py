@@ -5,6 +5,7 @@ from data.users import User
 from forms.user import RegisterForm, LoginForm
 import os
 from cf_api import create_json
+import json
 
 global us
 app = Flask(__name__)
@@ -79,8 +80,11 @@ def logout():
 @app.route('/new_table', methods=['GET', 'POST'])
 @login_required
 def new_table():
+    global us
     create_json(us)
-
+    with open(f'{us}_contest.json', 'r') as f:
+        jsonData = json.load(f)
+    return render_template('table.html', jsonData=jsonData)
 
 
 def main():
