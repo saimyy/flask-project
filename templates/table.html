@@ -4,7 +4,7 @@
     <form id="jsonForm" method="post" action="/submit">
         <div id="checkboxContainer">
             {% for item in jsonData %}
-                <input type="checkbox" name="checkboxItem" value="{{ item.id }}">
+                <input type="checkbox" name="checkboxItem" value="{{item}}">
                 <label>{{ item }}</label>
                 <br>
             {% endfor %}
