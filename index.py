@@ -1,10 +1,11 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, send_file
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from data import db_session
 from data.users import User
 from forms.user import RegisterForm, LoginForm
 import os
 from cf_api import create_json
+from excel_table import new_excel_table
 import json
 
 global us
@@ -84,23 +85,31 @@ def new_table():
     global us
     global jsonData
     create_json(us)
-    with open(f'{us}_contest.json', 'r') as f:
+    with open(f'json/{us}_contest.json', 'r') as f:
         jsonData = json.load(f)
     return render_template('table.html', jsonData=jsonData, title='Новая таблица')
+
+
+@app.route('/download_file')
+@login_required
+def u():
+    global path
+    return send_file(path, as_attachment=True)
 
 
 @app.route('/submit', methods=['POST'])
 @login_required
 def submit():
     global jsonData
-    submit_dict = {}
+    global path
+    submit_tup = []
     if request.method == 'POST':
         checkbox_items = request.form.getlist('checkboxItem')
         for item in checkbox_items:
-            if item not in submit_dict:
-                submit_dict[item] = jsonData[item]
-        print(submit_dict)
-    return render_template('submit.html', title='Все решено', dic=submit_dict)
+            submit_tup.append((item, f'https://codeforces.com{jsonData[item]}/standings/groupmates/true'))
+        print(submit_tup)
+        path = new_excel_table(submit_tup, us)
+        return render_template('submit.html')
 
 
 def main():

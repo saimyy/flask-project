@@ -35,7 +35,7 @@ def create_json(find_handle):
         link = tds[0].find('a').get('href')
         if find_handle in han.text:
             dict_contest[name] = link
-    with open(f'{find_handle}_contest.json', 'w') as fp:
+    with open(f'json/{find_handle}_contest.json', 'w') as fp:
         json.dump(dict_contest, fp, indent=4)
     driver.close()
     driver.quit()
