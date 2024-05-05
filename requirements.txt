@@ -1,0 +1,9 @@
+SQLAlchemy
+Werkzeug
+WTForms
+beautifulsoup4
+selenium
+Flask
+XlsxWriter
+Flask_login
+Flask-WTF
