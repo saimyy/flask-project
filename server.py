@@ -109,7 +109,7 @@ def submit():
             submit_tup.append((item, f'https://codeforces.com{jsonData[item]}/standings/groupmates/true'))
         print(submit_tup)
         path = new_excel_table(submit_tup, us)
-        return render_template('submit.html')
+        return render_template('submit.html', title='Конец')
 
 
 def main():
